@@ -100,6 +100,30 @@ class Price_history(Base):
         return "<Type 'Price_history' (flat_id='%s', price='%s', date='%s')>" % \
                (self.flat_id, self.price, self.observe_date)
 
+
+class Metro(Base):
+
+    __tablename__ = 'metro'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    geom = Column(Geometry("POINT", srid=32636))
+
+
+class Kad(Base):
+
+    __tablename__ = 'KAD'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    geom = Column(Geometry("MULTILINE", srid=32636))
+
+
+class Parks(Base):
+
+    __tablename__ = 'parks'
+    id = Column(Integer, primary_key=True)
+    geom = Column(Geometry("MULTILINE", srid=32636))
+
+
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
 
