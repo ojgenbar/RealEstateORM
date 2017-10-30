@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 import datetime
 from ORMBase import Flat, District, Address, Price_history
-from ORMBase import session
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 import cPickle
 
@@ -38,12 +37,9 @@ def get_district_number(district):
     return res
 
 
+def upload_day(session, properties_lst, current_date):
 
-def upload_day(lst, current_date):
-
-    # global session
-
-    for row in lst:
+    for row in properties_lst:
         qrooms = row[0]
         distID = get_district_number(row[1])
         ruAddr = row[2]
@@ -71,7 +67,7 @@ def upload_day(lst, current_date):
         bath = row[11]
         price = row[13]
         abil = row[15]
-        agen =row[16]
+        agen = row[16]
         tel = row[17]
         descr = row[18]
         bn_id = row[19]
@@ -151,15 +147,4 @@ def upload_day(lst, current_date):
         # sup._price_sqm = sup.price_sqm
         # print sup._price_sqm
         session.merge(sup)
-        session.commit()
-
-if __name__ == '__main__':
-    htm = r"E:\Dropbox\BNParserTask\2017.01.31_07.15\parsed\BNp2_list.pd"
-    f = open(htm, 'rb')
-    lst = cPickle.load(f)
-    # print get_district_number(lst[0][1])
-    upload_day(lst, datetime.date(2017, 1, 31))
-
-    f.close()
-
     session.commit()

@@ -12,7 +12,6 @@ from geoalchemy2 import Geometry
 
 
 Base = declarative_base()
-engine = create_engine('postgresql+psycopg2://oj_gen:7FmDsD77@localhost/RealEstate', echo=True)
 
 
 class District(Base):
@@ -124,8 +123,16 @@ class Parks(Base):
     geom = Column(Geometry("MULTILINE", srid=32636))
 
 
-if __name__ == "__main__":
-    Base.metadata.create_all(engine)
+def create_session(db, user, password):
+    engine = create_engine('postgresql+psycopg2://{}:{}@localhost/{}'.format(user, password, db), echo=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    return session
 
-Session = sessionmaker(bind=engine)
-session = Session()
+if __name__ == "__main__":
+    print "Attention! You're going to create database structure!"
+    passw = raw_input('Password: ')
+    usr = raw_input('User: ')
+    db_name = raw_input('Database name: ')
+    eng = create_engine('postgresql+psycopg2://{}:{}@localhost/{}'.format(usr, passw, db_name), echo=True)
+    Base.metadata.create_all(eng)
