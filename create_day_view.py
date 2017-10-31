@@ -1,8 +1,7 @@
-from ORMBase import session
 import datetime
 
 
-def create(obsdate):
+def create(session, obsdate):
     y = str(obsdate.year).zfill(4)
     d = str(obsdate.day).zfill(2)
     m = str(obsdate.month).zfill(2)

@@ -123,11 +123,12 @@ class Parks(Base):
     geom = Column(Geometry("MULTILINE", srid=32636))
 
 
-def create_session(db, user, password):
-    engine = create_engine('postgresql+psycopg2://{}:{}@localhost/{}'.format(user, password, db), echo=True)
+def create_session(db, user, password, echo=False):
+    engine = create_engine('postgresql+psycopg2://{}:{}@localhost/{}'.format(user, password, db), echo=echo)
     Session = sessionmaker(bind=engine)
     session = Session()
     return session
+
 
 if __name__ == "__main__":
     print "Attention! You're going to create database structure!"
