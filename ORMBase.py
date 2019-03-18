@@ -1,10 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Numeric, Date
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy import UniqueConstraint
@@ -16,21 +14,21 @@ Base = declarative_base()
 
 class District(Base):
 
-    __tablename__ = 'district'
+    __tablename__ = 'districts'
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
     addresses = relationship('Address', back_populates="district")
 
     def __repr__(self):
-        return "<Type 'District' (name='%s')>" % self.name.encode('UTF8')
+        return "<Type 'District' (id='{}', name='{}')>".format(self.id, self.name)
 
 
 class Address(Base):
 
-    __tablename__ = 'address'
+    __tablename__ = 'addresses'
     id = Column(Integer, primary_key=True)
-    district_id = Column(Integer, ForeignKey('district.id'))
+    district_id = Column(Integer, ForeignKey('districts.id'))
     ru_address = Column(String)
     en_address = Column(String, unique=True)
     geom = Column(Geometry("POINT", srid=4326))
@@ -42,14 +40,14 @@ class Address(Base):
     flats = relationship('Flat', back_populates="address")
 
     def __repr__(self):
-        return "<Type 'Address' (id='%s')>" % self.id
+        return "<Type 'Address' (id='{}', en_address='{}')>".format(self.id, self.en_address)
 
 
 class Flat(Base):
 
-    __tablename__ = 'flat'
+    __tablename__ = 'flats'
     id = Column(Integer, primary_key=True)
-    address_id = Column(Integer, ForeignKey('address.id'))
+    address_id = Column(Integer, ForeignKey('addresses.id'))
     qrooms = Column(Integer)
     floor = Column(Integer)
     area = Column(Numeric(10, 3))
@@ -64,20 +62,19 @@ class Flat(Base):
     ad_type = Column(Integer)
     link = Column(String, unique=True)
 
-    __table_args__ = (UniqueConstraint('bn_id', 'ad_type', name='u_bn'), )
+    __table_args__ = (UniqueConstraint('bn_id', 'ad_type', name='flats_bn_id_ad_type_key'), )
 
     address = relationship("Address", back_populates='flats')
-
-    prices = relationship('Price_history', back_populates="flat")
+    prices = relationship('PriceHistory', back_populates="flat")
 
     def __repr__(self):
-        return "<Type 'Flat' (address_id='%s', area='%s')>" % (self.address_id, self.area)
+        return "<Type 'Flat' (address_id='{}', area='{}')>".format(self.address_id, self.area)
 
 
-class Price_history(Base):
+class PriceHistory(Base):
 
     __tablename__ = 'price_history'
-    flat_id = Column(Integer, ForeignKey('flat.id'), primary_key=True)
+    flat_id = Column(Integer, ForeignKey('flats.id'), primary_key=True)
     observe_date = Column(Date,  primary_key=True)
     price = Column(Numeric(10, 3))
     _price_sqm = Column('price_sqm', Numeric(20, 15))
@@ -96,44 +93,8 @@ class Price_history(Base):
         self._price_sqm = price_sqm
 
     def __repr__(self):
-        return "<Type 'Price_history' (flat_id='%s', price='%s', date='%s')>" % \
-               (self.flat_id, self.price, self.observe_date)
+        data = (self.flat_id, self.price, self.observe_date)
+        return "<Type 'Price_history' (flat_id='{}', price='{}', date='{}')>".format(*data)
 
 
-class Metro(Base):
-
-    __tablename__ = 'metro'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    geom = Column(Geometry("POINT", srid=32636))
-
-
-class Kad(Base):
-
-    __tablename__ = 'KAD'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    geom = Column(Geometry("MULTILINE", srid=32636))
-
-
-class Parks(Base):
-
-    __tablename__ = 'parks'
-    id = Column(Integer, primary_key=True)
-    geom = Column(Geometry("MULTILINE", srid=32636))
-
-
-def create_session(db, user, password, echo=False):
-    engine = create_engine('postgresql+psycopg2://{}:{}@localhost/{}'.format(user, password, db), echo=echo)
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    return session
-
-
-if __name__ == "__main__":
-    print "Attention! You're going to create database structure!"
-    passw = raw_input('Password: ')
-    usr = raw_input('User: ')
-    db_name = raw_input('Database name: ')
-    eng = create_engine('postgresql+psycopg2://{}:{}@localhost/{}'.format(usr, passw, db_name), echo=True)
-    Base.metadata.create_all(eng)
+__all__ = ['Address', 'District', 'Flat', 'PriceHistory']

@@ -1,16 +1,15 @@
 # -*- coding: UTF-8 -*-
-import datetime
-from ORMBase import Flat, District, Address, Price_history
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-import cPickle
+from ORMBase import Flat, Address, PriceHistory
+from sqlalchemy.orm.exc import NoResultFound
+
+
+"""
+Old shit. It should be rewritten in not so retard way
+"""
 
 
 def get_district_number(district):
-
-    try:
-        district = district.decode('utf-8')
-    except UnicodeEncodeError:
-        pass
+    district = district
     DISTR_DICT = {
          u'Адмиралтейский район': 1,
          u'Василеостровский район': 2,
@@ -50,11 +49,11 @@ def upload_day(session, properties_lst, current_date):
         lst1 = row[6].replace(u'\\', u'/').split(u'/')
         if len(lst1) == 2:
             try:
-                floor = int(lst1[0].encode('utf8'))
+                floor = int(lst1[0])
             except ValueError:
                 floor = None
             try:
-                floors = int(lst1[1].encode('utf8'))
+                floors = int(lst1[1])
             except ValueError:
                 floors = None
         else:
@@ -74,7 +73,7 @@ def upload_day(session, properties_lst, current_date):
         bn_type = row[20]
         link = row[21]
 
-        sup = Price_history(observe_date=current_date, price=price)
+        sup = PriceHistory(observe_date=current_date, price=price)
         if bn_type == 3:
             q = session.query(Flat.id, Flat.address_id).filter(Flat.bn_id == bn_id,
                                                                Flat.ad_type == 3).one_or_none()
