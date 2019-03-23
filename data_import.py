@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from ORMBase import Flat, Address, PriceHistory
+from orm_main import Flat, Address, PriceHistory
 from sqlalchemy.orm.exc import NoResultFound
 
 

@@ -94,7 +94,7 @@ class PriceHistory(Base):
 
     def __repr__(self):
         data = (self.flat_id, self.price, self.observe_date)
-        return "<Type 'Price_history' (flat_id='{}', price='{}', date='{}')>".format(*data)
+        return "<Type 'PriceHistory' (flat_id='{}', price='{}', date='{}')>".format(*data)
 
 
-__all__ = ['Address', 'District', 'Flat', 'PriceHistory']
+__all__ = ['Base', 'Address', 'District', 'Flat', 'PriceHistory']
