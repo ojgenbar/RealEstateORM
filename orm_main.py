@@ -66,4 +66,4 @@ class PriceHistory(Base):
         return "<Type 'PriceHistory' (flat_id='{}', price='{}', date='{}')>".format(*data)
 
 
-__all__ = ['Base', 'Address', 'Flat', 'PriceHistory']
+__all__ = ['Base', 'Address', 'Flat', 'PriceHistory', 'MaterialTypeEnum']
