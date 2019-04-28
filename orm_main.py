@@ -20,7 +20,7 @@ class Address(Base):
     geom = Column(Geometry("POINT", srid=4326))
     material_type = Column(Enum(MaterialTypeEnum))
     floors = Column(Integer)
-    cian_id = Column(Integer, unique=True, nullable=False)
+    cian_id = Column(Integer)
     year = Column(Integer)
 
     flats = relationship('Flat', back_populates="address")
