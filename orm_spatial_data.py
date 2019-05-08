@@ -32,7 +32,7 @@ class School(SpatialBase):
 
 
 class Kindergarten(SpatialBase):
-    __tablename__ = 'kindergarten'
+    __tablename__ = 'kindergartens'
 
 
 __all__ = ['Kad', 'Kindergarten', 'Metro', 'Park', 'School']

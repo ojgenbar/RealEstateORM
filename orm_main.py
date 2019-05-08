@@ -43,6 +43,8 @@ class AddressView(Base):
     parks = Column(Integer, nullable=False)
     kad = Column(Integer, nullable=False)
     metro = Column(Integer, nullable=False)
+    school = Column(Integer, nullable=False)
+    kindergarten = Column(Integer, nullable=False)
 
     def __repr__(self):
         return "<Type 'AddressView' (id='{}')>".format(self.id)
