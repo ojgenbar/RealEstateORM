@@ -27,4 +27,12 @@ class Park(SpatialBase):
     __tablename__ = 'parks'
 
 
-__all__ = ['Kad', 'Metro', 'Park']
+class School(SpatialBase):
+    __tablename__ = 'schools'
+
+
+class Kindergarten(SpatialBase):
+    __tablename__ = 'kindergarten'
+
+
+__all__ = ['Kad', 'Kindergarten', 'Metro', 'Park', 'School']

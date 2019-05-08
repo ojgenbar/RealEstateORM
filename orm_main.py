@@ -8,7 +8,7 @@ import enum
 
 Base = declarative_base()
 
-
+# noinspection PyArgumentList
 MaterialTypeEnum = enum.Enum('MaterialTypeEnum', 'brick monolith panel block wood stalin monolithBrick old')
 
 
@@ -27,6 +27,25 @@ class Address(Base):
 
     def __repr__(self):
         return "<Type 'Address' (id='{}')>".format(self.id)
+
+
+class AddressView(Base):
+    __tablename__ = 'addresses_view'
+    id = Column(Integer, primary_key=True)
+    ru_address = Column(String)
+    geom = Column(Geometry("POINT", srid=4326))
+    material_type = Column(Enum(MaterialTypeEnum))
+    floors = Column(Integer)
+    cian_id = Column(Integer)
+    year = Column(Integer)
+
+    address_id = Column(Integer, nullable=False)
+    parks = Column(Integer, nullable=False)
+    kad = Column(Integer, nullable=False)
+    metro = Column(Integer, nullable=False)
+
+    def __repr__(self):
+        return "<Type 'AddressView' (id='{}')>".format(self.id)
 
 
 class Flat(Base):
@@ -66,4 +85,4 @@ class PriceHistory(Base):
         return "<Type 'PriceHistory' (flat_id='{}', price='{}', date='{}')>".format(*data)
 
 
-__all__ = ['Base', 'Address', 'Flat', 'PriceHistory', 'MaterialTypeEnum']
+__all__ = ['Base', 'Address', 'AddressView', 'Flat', 'PriceHistory', 'MaterialTypeEnum']
